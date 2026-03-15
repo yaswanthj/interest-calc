@@ -1,0 +1,30 @@
+{
+  "name": "Telugu Interest Calculator",
+  "short_name": "వడ్డీ లెక్కలు",
+  "description": "Professional Telugu village style interest calculator with AI insights by VS APPS. Accurate, fast, and offline-ready.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#d97706",
+  "orientation": "portrait",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg width='192' height='192' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100' height='100' rx='20' fill='%23d97706' /%3E%3Cpath d='M25 35L42 70L59 35' stroke='white' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' /%3E%3Cpath d='M75 40C75 35 70 30 65 30C60 30 55 35 55 40C55 45 60 50 65 50C70 50 75 55 75 60C75 65 70 70 65 70C60 70 55 65 55 60' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg width='512' height='512' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100' height='100' rx='20' fill='%23d97706' /%3E%3Cpath d='M25 35L42 70L59 35' stroke='white' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' /%3E%3Cpath d='M75 40C75 35 70 30 65 30C60 30 55 35 55 40C55 45 60 50 65 50C70 50 75 55 75 60C75 65 70 70 65 70C60 70 55 65 55 60' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": [
+    "finance",
+    "utilities"
+  ],
+  "lang": "te"
+}

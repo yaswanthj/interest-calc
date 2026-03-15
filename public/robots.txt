@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://interest-calc-steel.vercel.app/sitemap.xml

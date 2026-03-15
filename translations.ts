@@ -52,7 +52,8 @@ export const TRANSLATIONS: Record<Language, any> = {
     APPLY_NOW: 'Apply Now',
     SUPPORT_DEV: 'Support the Developer',
     YOUTUBE_TITLE: 'Devotional Videos',
-    WATCH_VIDEOS: 'Watch on YouTube'
+    WATCH_VIDEOS: 'Watch on YouTube',
+    HELP_BTN: 'Help'
   },
   te: {
     TITLE: 'వడ్డీ లెక్కలు',
@@ -99,6 +100,7 @@ export const TRANSLATIONS: Record<Language, any> = {
     APPLY_NOW: 'ఇప్పుడే అప్లై చేయండి',
     SUPPORT_DEV: 'డెవలపర్‌కు మద్దతు ఇవ్వండి',
     YOUTUBE_TITLE: 'భక్తి వీడియోలు',
-    WATCH_VIDEOS: 'యూట్యూబ్‌లో చూడండి'
+    WATCH_VIDEOS: 'యూట్యూబ్‌లో చూడండి',
+    HELP_BTN: 'సహాయం'
   }
 };
