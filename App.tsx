@@ -37,6 +37,38 @@ const App: React.FC = () => {
 
   const t = TRANSLATIONS[lang] || TRANSLATIONS['en'];
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('p');
+    const r = params.get('r');
+    const a = params.get('a');
+    const m = params.get('m');
+    const d = params.get('d');
+    const s = params.get('s');
+    const e = params.get('e');
+    const it = params.get('it');
+
+    if (p || r || d || s || e) {
+      const newInput = { ...input };
+      if (p) newInput.principal = parseFloat(p);
+      if (r) newInput.rate = parseFloat(r);
+      if (a) newInput.isAnnualRate = a === '1';
+      if (m) newInput.useMonthsInput = m === '1';
+      if (d) newInput.durationMonths = parseFloat(d);
+      if (s) newInput.startDate = s;
+      if (e) newInput.endDate = e;
+      if (it) newInput.interestType = it as InterestType;
+
+      setInput(newInput);
+      
+      // Auto calculate if enough data
+      if (newInput.principal && newInput.rate && (newInput.durationMonths || (newInput.startDate && newInput.endDate))) {
+        const res = calculateInterest(newInput);
+        setResult(res);
+      }
+    }
+  }, []);
+
   const themeColors = [
     { name: 'Amber', class: 'bg-amber-500', border: 'border-amber-500', text: 'text-amber-600', value: 'amber' },
     { name: 'Emerald', class: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-600', value: 'emerald' },
@@ -129,26 +161,53 @@ const App: React.FC = () => {
 
   const handleCopyResult = () => {
     if (!result) return;
-    const shareText = `💰 *${t.TITLE}* 💰\n\n💵 *అసలు:* ₹${result.principal.toLocaleString('en-IN')}\n📈 *నెలవారీ వడ్డీ:* ₹${result.monthlyInterest.toLocaleString('en-IN')}\n📅 *కాలం:* ${result.years}సం ${result.months}నె ${result.days}రో\n✅ *మొత్తం:* ₹${result.totalAmount.toLocaleString('en-IN')}\n\n_Calculated using VS APPS_`;
+    const params = new URLSearchParams();
+    params.set('p', input.principal.toString());
+    params.set('r', input.rate.toString());
+    params.set('a', input.isAnnualRate ? '1' : '0');
+    params.set('m', input.useMonthsInput ? '1' : '0');
+    if (input.useMonthsInput) params.set('d', input.durationMonths.toString());
+    else {
+      params.set('s', input.startDate);
+      params.set('e', input.endDate);
+    }
+    params.set('it', input.interestType);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    const shareText = `💰 *${t.TITLE}* 💰\n\n💵 *అసలు:* ₹${result.principal.toLocaleString('en-IN')}\n📈 *నెలవారీ వడ్డీ:* ₹${result.monthlyInterest.toLocaleString('en-IN')}\n📅 *కాలం:* ${result.years}సం ${result.months}నె ${result.days}రో\n✅ *మొత్తం:* ₹${result.totalAmount.toLocaleString('en-IN')}\n\n🔗 *Link:* ${shareUrl}\n\n_Calculated using VS APPS_`;
     navigator.clipboard.writeText(shareText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleShareResult = async (res: CalculationResult) => {
-    const shareText = `💰 *${t.TITLE}* 💰\n\n💵 *అసలు:* ₹${res.principal.toLocaleString('en-IN')}\n📈 *నెలవారీ వడ్డీ:* ₹${res.monthlyInterest.toLocaleString('en-IN')}\n✅ *మొత్తం:* ₹${res.totalAmount.toLocaleString('en-IN')}\n\n_VS APPS_`;
+    const params = new URLSearchParams();
+    params.set('p', input.principal.toString());
+    params.set('r', input.rate.toString());
+    params.set('a', input.isAnnualRate ? '1' : '0');
+    params.set('m', input.useMonthsInput ? '1' : '0');
+    if (input.useMonthsInput) params.set('d', input.durationMonths.toString());
+    else {
+      params.set('s', input.startDate);
+      params.set('e', input.endDate);
+    }
+    params.set('it', input.interestType);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    const shareText = `💰 *${t.TITLE}* 💰\n\n💵 *అసలు:* ₹${res.principal.toLocaleString('en-IN')}\n📈 *నెలవారీ వడ్డీ:* ₹${res.monthlyInterest.toLocaleString('en-IN')}\n✅ *మొత్తం:* ₹${res.totalAmount.toLocaleString('en-IN')}\n\n🔗 *Link:* ${shareUrl}\n\n_VS APPS_`;
+    
     if (navigator.share) {
-      try { await navigator.share({ title: t.TITLE, text: shareText }); } catch (e) {}
+      try { await navigator.share({ title: t.TITLE, text: shareText, url: shareUrl }); } catch (e) {}
     } else {
       window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
     }
   };
 
   return (
-    <div className={`flex flex-col h-screen max-w-xl mx-auto bg-slate-50/30 relative overflow-hidden shadow-2xl border-x border-slate-100`}>
+    <div className={`flex flex-col h-[100dvh] max-w-xl mx-auto bg-slate-50/30 relative overflow-hidden shadow-2xl border-x border-slate-100`}>
       
       {/* Compact Header */}
-      <header className={`bg-gradient-to-br ${getThemeClass('from', 500)} ${getThemeClass('to', 600)} text-white px-4 py-2.5 rounded-b-3xl shadow-lg z-20 relative flex items-center justify-between`}>
+      <header className={`bg-gradient-to-br ${getThemeClass('from', 500)} ${getThemeClass('to', 600)} text-white px-4 pt-[calc(0.625rem+env(safe-area-inset-top))] pb-3.5 rounded-b-[2rem] shadow-lg z-20 relative flex items-center justify-between`}>
         <div className="flex items-center space-x-2 overflow-hidden">
           <Logo themeColor={currentThemeHex} className="flex-shrink-0" />
           <div className="flex flex-col truncate">
@@ -439,7 +498,7 @@ const App: React.FC = () => {
       )}
 
       {/* Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-xl mx-auto glass border-t border-slate-100 flex items-center justify-around h-20 px-4 pb-2 z-30">
+      <nav className="fixed bottom-0 left-0 right-0 max-w-xl mx-auto glass border-t border-slate-100 flex items-center justify-around h-[calc(5rem+env(safe-area-inset-bottom))] px-4 pb-[env(safe-area-inset-bottom)] z-30">
         <button onClick={() => setActiveTab('calc')} className={`flex flex-col items-center transition-all ${activeTab === 'calc' ? `${getThemeClass('text', 600)} scale-110` : 'text-slate-400'}`}>
           <i className="fa-solid fa-calculator text-base mb-1"></i>
           <span className="text-[10px] font-black uppercase">Calc</span>
